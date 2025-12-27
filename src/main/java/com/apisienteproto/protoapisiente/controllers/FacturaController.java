@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apisienteproto.protoapisiente.models.FacturaCompletaDTO;
 import com.apisienteproto.protoapisiente.models.FacturaRequestDTO;
 import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
 import com.apisienteproto.protoapisiente.services.FacturaConsultaService;
@@ -25,11 +26,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class FacturaController {
 
     private final FacturaService facturaService;
-    private final FacturaConsultaService service;
+    private final FacturaConsultaService facturaConsultaService;
 
-    public FacturaController(FacturaService facturaService, FacturaConsultaService service) {
+    public FacturaController(FacturaService facturaService, FacturaConsultaService facturaConsultaService) {
         this.facturaService = facturaService;
-        this.service = service;
+        this.facturaConsultaService = facturaConsultaService;
     }
 
     @PostMapping
@@ -53,12 +54,12 @@ public class FacturaController {
 
     @GetMapping
     public ResponseEntity<List<FacturaResponseDTO>> listarFacturas() {
-        return ResponseEntity.ok(service.listarFacturas());
+        return ResponseEntity.ok(facturaConsultaService.listarFacturas());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FacturaResponseDTO> obtenerFactura(@PathVariable int id) {
-        return ResponseEntity.ok(service.obtenerFacturaCompleta(id));
+    public ResponseEntity<FacturaCompletaDTO> obtenerFactura(@PathVariable int id) {
+        return ResponseEntity.ok(facturaConsultaService.obtenerFacturaCompleta(id));
     }
 
 }

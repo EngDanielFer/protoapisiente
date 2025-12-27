@@ -18,43 +18,49 @@ public class FacturaConsultaRepository {
 
         String sql = """
             SELECT 
-                id,
-                fecha,
-                nombre_cliente,
-                apellido_cliente,
-                email_cliente,
-                valor_pagado,
-                precio_envio,
-                valor_total,
-                metodo_pago
-            FROM facturas
-            ORDER BY fecha DESC
+                f.id,
+                f.fecha,
+                f.nombre_cliente,
+                f.apellido_cliente,
+                f.email_cliente,
+                f.valor_pagado,
+                f.precio_envio,
+                f.valor_total,
+                f.metodo_pago
+            FROM facturas f
+            ORDER BY f.fecha DESC
         """;
 
         return entityManager.createNativeQuery(sql).getResultList();
     }
 
-    public Object[] obtenerFacturaPorId(int idFactura) {
+    public Object[] obtenerFacturaPorId(int id) {
 
         String sql = """
             SELECT 
-                id,
-                fecha,
-                nombre_cliente,
-                apellido_cliente,
-                email_cliente,
-                valor_pagado,
-                precio_envio,
-                valor_total,
-                metodo_pago
-            FROM facturas
-            WHERE id = :idFactura
+                f.id,
+                f.fecha,
+                f.nombre_cliente,
+                f.apellido_cliente,
+                f.email_cliente,
+                f.direccion_cliente,
+                f.complemento_direccion,
+                f.telefono_cliente,
+                f.pais_cliente,
+                f.region_cliente,
+                f.ciudad_cliente,
+                f.valor_pagado,
+                f.precio_envio,
+                f.valor_total,
+                f.metodo_pago
+            FROM facturas f
+            WHERE f.id = :id
         """;
 
-        Query query = entityManager.createNativeQuery(sql);
-        query.setParameter("idFactura", idFactura);
-
-        return (Object[]) query.getSingleResult();
+        return (Object[]) entityManager
+                .createNativeQuery(sql)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     public List<Object[]> obtenerDetalleFactura(int idFactura) {
@@ -71,10 +77,10 @@ public class FacturaConsultaRepository {
             WHERE fd.id_factura = :idFactura
         """;
 
-        Query query = entityManager.createNativeQuery(sql);
-        query.setParameter("idFactura", idFactura);
-
-        return query.getResultList();
+        return entityManager
+                .createNativeQuery(sql)
+                .setParameter("idFactura", idFactura)
+                .getResultList();
     }
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.apisienteproto.protoapisiente.models.FacturaCompletaDTO;
 import com.apisienteproto.protoapisiente.models.FacturaDetalleDTO;
 import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
 import com.apisienteproto.protoapisiente.repositories.FacturaConsultaRepository;
@@ -28,7 +29,7 @@ public class FacturaConsultaService {
         for (Object[] row : rows) {
             FacturaResponseDTO dto = new FacturaResponseDTO();
 
-            dto.setIdFactura((int) row[0]);
+            dto.setId((int) row[0]);
             dto.setFecha(((Timestamp) row[1]).toLocalDateTime());
             dto.setNombreCliente((String) row[2]);
             dto.setApellidoCliente((String) row[3]);
@@ -44,38 +45,42 @@ public class FacturaConsultaService {
         return facturas;
     }
 
-    public FacturaResponseDTO obtenerFacturaCompleta(int idFactura) {
+    public FacturaCompletaDTO obtenerFacturaCompleta(int id) {
 
-        Object[] cabecera = repository.obtenerFacturaPorId(idFactura);
-        List<Object[]> detalleRows = repository.obtenerDetalleFactura(idFactura);
+        Object[] f = repository.obtenerFacturaPorId(id);
+        List<Object[]> detalleRows = repository.obtenerDetalleFactura(id);
 
-        FacturaResponseDTO factura = new FacturaResponseDTO();
+        FacturaCompletaDTO factura = new FacturaCompletaDTO();
 
-        factura.setIdFactura((int) cabecera[0]);
-        factura.setFecha(((Timestamp) cabecera[1]).toLocalDateTime());
-        factura.setNombreCliente((String) cabecera[2]);
-        factura.setApellidoCliente((String) cabecera[3]);
-        factura.setEmailCliente((String) cabecera[4]);
-        factura.setValorPagado((BigDecimal) cabecera[5]);
-        factura.setPrecioEnvio((BigDecimal) cabecera[6]);
-        factura.setValorTotal((BigDecimal) cabecera[7]);
-        factura.setMetodoPago((String) cabecera[8]);
+        factura.setId((Integer) f[0]);
+        factura.setFecha(((Timestamp) f[1]).toLocalDateTime());
+        factura.setNombreCliente((String) f[2]);
+        factura.setApellidoCliente((String) f[3]);
+        factura.setEmailCliente((String) f[4]);
+        factura.setDireccionCliente((String) f[5]);
+        factura.setComplementoDireccion((String) f[6]);
+        factura.setTelefonoCliente((String) f[7]);
+        factura.setPaisCliente((String) f[8]);
+        factura.setRegionCliente((String) f[9]);
+        factura.setCiudadCliente((String) f[10]);
+        factura.setValorPagado((BigDecimal) f[11]);
+        factura.setPrecioEnvio((BigDecimal) f[12]);
+        factura.setValorTotal((BigDecimal) f[13]);
+        factura.setMetodoPago((String) f[14]);
 
         List<FacturaDetalleDTO> detalle = new ArrayList<>();
 
-        for (Object[] row : detalleRows) {
-            FacturaDetalleDTO d = new FacturaDetalleDTO();
-            d.setIdProducto((int) row[0]);
-            d.setNombreProducto((String) row[1]);
-            d.setCantidadProducto((int) row[2]);
-            d.setPrecioUnitario((BigDecimal) row[3]);
-            d.setSubtotal((BigDecimal) row[4]);
-
-            detalle.add(d);
+        for (Object[] d : detalleRows) {
+            FacturaDetalleDTO det = new FacturaDetalleDTO();
+            det.setIdProducto((Integer) d[0]);
+            det.setNombreProducto((String) d[1]);
+            det.setCantidadProducto((Integer) d[2]);
+            det.setPrecioUnitario((BigDecimal) d[3]);
+            det.setSubtotal((BigDecimal) d[4]);
+            detalle.add(det);
         }
 
         factura.setDetalle(detalle);
-
         return factura;
     }
 }
