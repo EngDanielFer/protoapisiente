@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.apisienteproto.protoapisiente.models.FacturaCompletaDTO;
 import com.apisienteproto.protoapisiente.models.FacturaDetalleDTO;
-import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
+// import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
 import com.apisienteproto.protoapisiente.repositories.FacturaConsultaRepository;
 
 @Service
@@ -21,29 +21,29 @@ public class FacturaConsultaService {
         this.repository = repository;
     }
 
-    public List<FacturaResponseDTO> listarFacturas() {
+    // public List<FacturaResponseDTO> listarFacturas() {
 
-        List<Object[]> rows = repository.listarFacturas();
-        List<FacturaResponseDTO> facturas = new ArrayList<>();
+    //     List<Object[]> rows = repository.listarFacturas();
+    //     List<FacturaResponseDTO> facturas = new ArrayList<>();
 
-        for (Object[] row : rows) {
-            FacturaResponseDTO dto = new FacturaResponseDTO();
+    //     for (Object[] row : rows) {
+    //         FacturaResponseDTO dto = new FacturaResponseDTO();
 
-            dto.setId((int) row[0]);
-            dto.setFecha(((Timestamp) row[1]).toLocalDateTime());
-            dto.setNombreCliente((String) row[2]);
-            dto.setApellidoCliente((String) row[3]);
-            dto.setEmailCliente((String) row[4]);
-            dto.setValorPagado((BigDecimal) row[5]);
-            dto.setPrecioEnvio((BigDecimal) row[6]);
-            dto.setValorTotal((BigDecimal) row[7]);
-            dto.setMetodoPago((String) row[8]);
+    //         dto.setId((int) row[0]);
+    //         dto.setFecha(((Timestamp) row[1]).toLocalDateTime());
+    //         dto.setNombreCliente((String) row[2]);
+    //         dto.setApellidoCliente((String) row[3]);
+    //         dto.setEmailCliente((String) row[4]);
+    //         dto.setValorPagado((BigDecimal) row[5]);
+    //         dto.setPrecioEnvio((BigDecimal) row[6]);
+    //         dto.setValorTotal((BigDecimal) row[7]);
+    //         dto.setMetodoPago((String) row[8]);
 
-            facturas.add(dto);
-        }
+    //         facturas.add(dto);
+    //     }
 
-        return facturas;
-    }
+    //     return facturas;
+    // }
 
     public FacturaCompletaDTO obtenerFacturaCompleta(int id) {
 

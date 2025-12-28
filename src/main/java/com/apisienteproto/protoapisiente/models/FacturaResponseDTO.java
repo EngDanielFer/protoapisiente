@@ -1,92 +1,106 @@
 package com.apisienteproto.protoapisiente.models;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+// import java.math.BigDecimal;
+// import java.time.LocalDateTime;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FacturaResponseDTO {
 
-    private int id;                 // ← corresponde a facturas.id
-    private LocalDateTime fecha;
+    private int id_factura;
+    private String mensaje;
+    private BigDecimal valor_total;
+    private BigDecimal valor_pagado;
+    private BigDecimal precio_envio;
 
-    private String nombreCliente;
-    private String apellidoCliente;
-    private String emailCliente;
+//     private int id;
+//     private LocalDateTime fecha;
 
-    private BigDecimal valorPagado;
-    private BigDecimal precioEnvio;
-    private BigDecimal valorTotal;
-    private String metodoPago;
+//     private String nombreCliente;
+//     private String apellidoCliente;
+//     private String emailCliente;
 
-    public int getId() {
-        return id;
-    }
+//     private BigDecimal valorPagado;
+//     private BigDecimal precioEnvio;
+//     private BigDecimal valorTotal;
+//     private String metodoPago;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//     public int getId() {
+//         return id;
+//     }
 
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
+//     public void setId(int id) {
+//         this.id = id;
+//     }
 
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
+//     public LocalDateTime getFecha() {
+//         return fecha;
+//     }
 
-    public String getNombreCliente() {
-        return nombreCliente;
-    }
+//     public void setFecha(LocalDateTime fecha) {
+//         this.fecha = fecha;
+//     }
 
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
-    }
+//     public String getNombreCliente() {
+//         return nombreCliente;
+//     }
 
-    public String getApellidoCliente() {
-        return apellidoCliente;
-    }
+//     public void setNombreCliente(String nombreCliente) {
+//         this.nombreCliente = nombreCliente;
+//     }
 
-    public void setApellidoCliente(String apellidoCliente) {
-        this.apellidoCliente = apellidoCliente;
-    }
+//     public String getApellidoCliente() {
+//         return apellidoCliente;
+//     }
 
-    public String getEmailCliente() {
-        return emailCliente;
-    }
+//     public void setApellidoCliente(String apellidoCliente) {
+//         this.apellidoCliente = apellidoCliente;
+//     }
 
-    public void setEmailCliente(String emailCliente) {
-        this.emailCliente = emailCliente;
-    }
+//     public String getEmailCliente() {
+//         return emailCliente;
+//     }
 
-    public BigDecimal getValorPagado() {
-        return valorPagado;
-    }
+//     public void setEmailCliente(String emailCliente) {
+//         this.emailCliente = emailCliente;
+//     }
 
-    public void setValorPagado(BigDecimal valorPagado) {
-        this.valorPagado = valorPagado;
-    }
+//     public BigDecimal getValorPagado() {
+//         return valorPagado;
+//     }
 
-    public BigDecimal getPrecioEnvio() {
-        return precioEnvio;
-    }
+//     public void setValorPagado(BigDecimal valorPagado) {
+//         this.valorPagado = valorPagado;
+//     }
 
-    public void setPrecioEnvio(BigDecimal precioEnvio) {
-        this.precioEnvio = precioEnvio;
-    }
+//     public BigDecimal getPrecioEnvio() {
+//         return precioEnvio;
+//     }
 
-    public BigDecimal getValorTotal() {
-        return valorTotal;
-    }
+//     public void setPrecioEnvio(BigDecimal precioEnvio) {
+//         this.precioEnvio = precioEnvio;
+//     }
 
-    public void setValorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
-    }
+//     public BigDecimal getValorTotal() {
+//         return valorTotal;
+//     }
 
-    public String getMetodoPago() {
-        return metodoPago;
-    }
+//     public void setValorTotal(BigDecimal valorTotal) {
+//         this.valorTotal = valorTotal;
+//     }
 
-    public void setMetodoPago(String metodoPago) {
-        this.metodoPago = metodoPago;
-    }
+//     public String getMetodoPago() {
+//         return metodoPago;
+//     }
+
+//     public void setMetodoPago(String metodoPago) {
+//         this.metodoPago = metodoPago;
+//     }
 
 }
