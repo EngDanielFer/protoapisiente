@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.apisienteproto.protoapisiente.models.FacturaCompletaDTO;
 import com.apisienteproto.protoapisiente.models.FacturaDetalleDTO;
-// import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
 import com.apisienteproto.protoapisiente.repositories.FacturaConsultaRepository;
 
 @Service
@@ -22,13 +21,10 @@ public class FacturaConsultaService {
     }
 
     // public List<FacturaResponseDTO> listarFacturas() {
-
     //     List<Object[]> rows = repository.listarFacturas();
     //     List<FacturaResponseDTO> facturas = new ArrayList<>();
-
     //     for (Object[] row : rows) {
     //         FacturaResponseDTO dto = new FacturaResponseDTO();
-
     //         dto.setId((int) row[0]);
     //         dto.setFecha(((Timestamp) row[1]).toLocalDateTime());
     //         dto.setNombreCliente((String) row[2]);
@@ -38,13 +34,10 @@ public class FacturaConsultaService {
     //         dto.setPrecioEnvio((BigDecimal) row[6]);
     //         dto.setValorTotal((BigDecimal) row[7]);
     //         dto.setMetodoPago((String) row[8]);
-
     //         facturas.add(dto);
     //     }
-
     //     return facturas;
     // }
-
     public FacturaCompletaDTO obtenerFacturaCompleta(int id) {
 
         Object[] f = repository.obtenerFacturaPorId(id);
@@ -82,5 +75,53 @@ public class FacturaConsultaService {
 
         factura.setDetalle(detalle);
         return factura;
+    }
+
+    public List<FacturaCompletaDTO> listarFacturasCompletas() {
+
+        List<Object[]> facturasFilas = repository.listarFacturasBase();
+        List<FacturaCompletaDTO> facturas = new ArrayList<>();
+
+        for (Object[] f : facturasFilas) {
+
+            Integer idFactura = (Integer) f[0];
+
+            FacturaCompletaDTO factura = new FacturaCompletaDTO();
+
+            factura.setId(idFactura);
+            factura.setFecha(((Timestamp) f[1]).toLocalDateTime());
+            factura.setNombreCliente((String) f[2]);
+            factura.setApellidoCliente((String) f[3]);
+            factura.setEmailCliente((String) f[4]);
+            factura.setDireccionCliente((String) f[5]);
+            factura.setComplementoDireccion((String) f[6]);
+            factura.setTelefonoCliente((String) f[7]);
+            factura.setPaisCliente((String) f[8]);
+            factura.setRegionCliente((String) f[9]);
+            factura.setCiudadCliente((String) f[10]);
+            factura.setValorPagado((BigDecimal) f[11]);
+            factura.setPrecioEnvio((BigDecimal) f[12]);
+            factura.setValorTotal((BigDecimal) f[13]);
+            factura.setMetodoPago((String) f[14]);
+
+            // Detalle
+            List<Object[]> detalleRows = repository.obtenerDetalleFactura(idFactura);
+            List<FacturaDetalleDTO> detalle = new ArrayList<>();
+
+            for (Object[] d : detalleRows) {
+                FacturaDetalleDTO det = new FacturaDetalleDTO();
+                det.setIdProducto((Integer) d[0]);
+                det.setNombreProducto((String) d[1]);
+                det.setCantidadProducto((Integer) d[2]);
+                det.setPrecioUnitario((BigDecimal) d[3]);
+                det.setSubtotal((BigDecimal) d[4]);
+                detalle.add(det);
+            }
+
+            factura.setDetalle(detalle);
+            facturas.add(factura);
+        }
+
+        return facturas;
     }
 }

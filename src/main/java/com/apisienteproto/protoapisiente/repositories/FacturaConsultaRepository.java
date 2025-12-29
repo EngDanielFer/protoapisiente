@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 
 @Repository
 public class FacturaConsultaRepository {
@@ -81,6 +80,31 @@ public class FacturaConsultaRepository {
                 .createNativeQuery(sql)
                 .setParameter("idFactura", idFactura)
                 .getResultList();
+    }
+
+    public List<Object[]> listarFacturasBase() {
+        String sql = """
+            SELECT 
+                f.id,
+                f.fecha,
+                f.nombre_cliente,
+                f.apellido_cliente,
+                f.email_cliente,
+                f.direccion_cliente,
+                f.complemento_direccion,
+                f.telefono_cliente,
+                f.pais_cliente,
+                f.region_cliente,
+                f.ciudad_cliente,
+                f.valor_pagado,
+                f.precio_envio,
+                f.valor_total,
+                f.metodo_pago
+            FROM facturas f
+            ORDER BY f.fecha DESC
+        """;
+
+        return entityManager.createNativeQuery(sql).getResultList();
     }
 
 }

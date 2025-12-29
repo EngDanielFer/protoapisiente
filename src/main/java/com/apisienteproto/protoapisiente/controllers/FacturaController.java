@@ -12,21 +12,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apisienteproto.protoapisiente.models.Factura;
-// import com.apisienteproto.protoapisiente.models.FacturaCompletaDTO;
-// import com.apisienteproto.protoapisiente.models.FacturaRequestDTO;
-import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
-// import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
-// import com.apisienteproto.protoapisiente.services.FacturaConsultaService;
-import com.apisienteproto.protoapisiente.services.FacturaService;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import com.apisienteproto.protoapisiente.models.FacturaCompletaDTO;
 import com.apisienteproto.protoapisiente.models.FacturaDTO;
+import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
+import com.apisienteproto.protoapisiente.services.FacturaConsultaService;
+import com.apisienteproto.protoapisiente.services.FacturaService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FacturaController {
 
     private final FacturaService facturaService;
-    // private final FacturaConsultaService facturaConsultaService;
+    private final FacturaConsultaService facturaConsultaService;
 
     // public FacturaController(FacturaService facturaService, FacturaConsultaService facturaConsultaService) {
     //     this.facturaService = facturaService;
@@ -90,7 +86,7 @@ public class FacturaController {
         try {
             log.info("Buscando factura con ID: {}", id);
 
-            Factura factura = facturaService.obtenerFactura(id);
+            FacturaCompletaDTO factura = facturaConsultaService.obtenerFacturaCompleta(id);
 
             log.info("Factura encontrada: {}", id);
             return ResponseEntity.ok(factura);
@@ -115,7 +111,7 @@ public class FacturaController {
         try {
             log.info("Obteniendo todas las facturas");
 
-            List<Factura> facturas = facturaService.obtenerTodasFacturas();
+            List<FacturaCompletaDTO> facturas = facturaConsultaService.listarFacturasCompletas();
 
             log.info("Se encontraron {} facturas", facturas.size());
             return ResponseEntity.ok(facturas);
