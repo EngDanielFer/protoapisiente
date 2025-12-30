@@ -37,6 +37,9 @@ public class ProductosModel {
     @Column
     private double precio_detal;
 
+    @Column
+    private int stock_producto;
+
     @Column(columnDefinition="LONGBLOB")
     private byte[] imagen_producto;
 
@@ -118,6 +121,14 @@ public class ProductosModel {
 
     public void setImagen_producto(byte[] imagen_producto) {
         this.imagen_producto = imagen_producto;
+    }
+
+    public int getStock_producto() {
+        return stock_producto;
+    }
+
+    public void setStock_producto(int stock_producto) {
+        this.stock_producto = stock_producto;
     }
 
     

@@ -53,6 +53,7 @@ public class ProductosService {
         dto.setGanancia_detal(producto.getGanancia_detal());
         dto.setPrecio_por_mayor(producto.getPrecio_por_mayor());
         dto.setPrecio_detal(producto.getPrecio_detal());
+        dto.setStock_producto(producto.getStock_producto());
         dto.setImagen_producto(producto.getImagen_producto());
 
         List<Map<String, Object>> insumosData = productosRepository.findInsumosByProductoID(id);

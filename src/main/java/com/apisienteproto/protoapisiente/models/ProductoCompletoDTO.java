@@ -14,6 +14,7 @@ public class ProductoCompletoDTO {
     private Double ganancia_detal;
     private Double precio_por_mayor;
     private Double precio_detal;
+    private int stock_producto;
     private List<InsumoProductoDTO> insumos;
     private double costo_luz;
     private double costo_agua;
@@ -228,6 +229,14 @@ public class ProductoCompletoDTO {
 
     public void setCosto_etiqueta(double costo_etiqueta) {
         this.costo_etiqueta = costo_etiqueta;
+    }
+
+    public int getStock_producto() {
+        return stock_producto;
+    }
+
+    public void setStock_producto(int stock_producto) {
+        this.stock_producto = stock_producto;
     }
 
 }
