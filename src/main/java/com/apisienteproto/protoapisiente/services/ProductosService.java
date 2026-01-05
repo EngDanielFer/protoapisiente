@@ -29,6 +29,10 @@ public class ProductosService {
         return (ArrayList<ProductosModel>) productosRepository.findAll();
     }
 
+    public ArrayList<ProductosModel> getProductosByStock() {
+        return (ArrayList<ProductosModel>) productosRepository.findProductosConStock();
+    }
+
     public Optional<ProductosModel> getProductoById(int id) {
         return productosRepository.findById(id);
     }

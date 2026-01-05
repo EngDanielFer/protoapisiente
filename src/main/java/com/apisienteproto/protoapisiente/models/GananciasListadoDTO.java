@@ -5,10 +5,8 @@ public class GananciasListadoDTO {
     private int id_ganancia;
     private int id_producto_stock;
     private double precio_insumos_total;
-    private double ganancia_total_por_mayor;
-    private double ganancia_total_detal;
-    private double precio_total_por_mayor;
-    private double precio_total_detal;
+    private double ganancia_total;
+    private double precio_total;
     private int id_producto;
     private String nombre_producto;
     
@@ -16,10 +14,8 @@ public class GananciasListadoDTO {
         this.id_ganancia = ganancias.getId_ganancia();
         this.id_producto_stock = ganancias.getId_producto_stock();
         this.precio_insumos_total = ganancias.getPrecio_insumos_total();
-        this.ganancia_total_por_mayor = ganancias.getGanancia_total_por_mayor();
-        this.ganancia_total_detal = ganancias.getGanancia_total_detal();
-        this.precio_total_por_mayor = ganancias.getPrecio_total_por_mayor();
-        this.precio_total_detal = ganancias.getPrecio_total_detal();
+        this.ganancia_total = ganancias.getGanancia_total();
+        this.precio_total = ganancias.getPrecio_total();
         this.id_producto = ganancias.getId_producto();
         this.nombre_producto = ganancias.getProducto().getNombre_producto();
     }
@@ -48,36 +44,20 @@ public class GananciasListadoDTO {
         this.precio_insumos_total = precio_insumos_total;
     }
 
-    public double getGanancia_total_por_mayor() {
-        return ganancia_total_por_mayor;
+    public double getGanancia_total() {
+        return ganancia_total;
     }
 
-    public void setGanancia_total_por_mayor(double ganancia_total_por_mayor) {
-        this.ganancia_total_por_mayor = ganancia_total_por_mayor;
+    public void setGanancia_total(double ganancia_total) {
+        this.ganancia_total = ganancia_total;
     }
 
-    public double getGanancia_total_detal() {
-        return ganancia_total_detal;
+    public double getPrecio_total() {
+        return precio_total;
     }
 
-    public void setGanancia_total_detal(double ganancia_total_detal) {
-        this.ganancia_total_detal = ganancia_total_detal;
-    }
-
-    public double getPrecio_total_por_mayor() {
-        return precio_total_por_mayor;
-    }
-
-    public void setPrecio_total_por_mayor(double precio_total_por_mayor) {
-        this.precio_total_por_mayor = precio_total_por_mayor;
-    }
-
-    public double getPrecio_total_detal() {
-        return precio_total_detal;
-    }
-
-    public void setPrecio_total_detal(double precio_total_detal) {
-        this.precio_total_detal = precio_total_detal;
+    public void setPrecio_total(double precio_total) {
+        this.precio_total = precio_total;
     }
 
     public int getId_producto() {

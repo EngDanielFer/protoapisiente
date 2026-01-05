@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apisienteproto.protoapisiente.models.Factura;
 import com.apisienteproto.protoapisiente.models.FacturaDTO;
-// import com.apisienteproto.protoapisiente.models.FacturaRequestDTO;
 import com.apisienteproto.protoapisiente.models.FacturaResponseDTO;
 import com.apisienteproto.protoapisiente.models.ProductoFacturaDTO;
 import com.apisienteproto.protoapisiente.repositories.FacturaRepository;
@@ -82,8 +81,8 @@ public class FacturaService {
             query.registerStoredProcedureParameter(10, String.class, ParameterMode.IN); // lista_productos
             query.registerStoredProcedureParameter(11, BigDecimal.class, ParameterMode.IN); // envio_cliente
             query.registerStoredProcedureParameter(12, String.class, ParameterMode.IN); // pago_cliente
-
-            query.registerStoredProcedureParameter(13, Integer.class, ParameterMode.OUT); // out_id_factura
+            query.registerStoredProcedureParameter(13, String.class, ParameterMode.IN); // tipo_precio
+            query.registerStoredProcedureParameter(14, Integer.class, ParameterMode.OUT); // out_id_factura
 
             String complemento = facturaDTO.getDatosCliente().getComplemento_direccion();
             if (complemento == null || complemento.trim().isEmpty()) {
@@ -102,12 +101,13 @@ public class FacturaService {
             query.setParameter(10, productosJson);
             query.setParameter(11, facturaDTO.getPrecio_envio());
             query.setParameter(12, facturaDTO.getMetodo_pago());
+            query.setParameter(13, facturaDTO.getTipo_precio());
 
             log.info("Ejecutando procedimiento almacenado...");
 
             query.execute();
 
-            Integer idFactura = (Integer) query.getOutputParameterValue(13);
+            Integer idFactura = (Integer) query.getOutputParameterValue(14);
 
             if (idFactura == null) {
                 throw new RuntimeException("El procedimiento no retornó un ID de factura");

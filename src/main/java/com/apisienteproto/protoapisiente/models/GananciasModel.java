@@ -48,16 +48,11 @@ public class GananciasModel {
     private int precio_insumos_total;
 
     @Column
-    private int ganancia_total_por_mayor;
+    private int ganancia_total;
 
     @Column
-    private int ganancia_total_detal;
+    private int precio_total;
 
-    @Column
-    private int precio_total_por_mayor;
-
-    @Column
-    private int precio_total_detal;
 
     public int getIdGanancia() {
         return id_ganancia;
@@ -91,37 +86,22 @@ public class GananciasModel {
         this.precio_insumos_total = precio_insumos_total;
     }
 
-    public int getGanancia_total_por_mayor() {
-        return ganancia_total_por_mayor;
+    public int getGanancia_total() {
+        return ganancia_total;
     }
 
-    public void setGanancia_total_por_mayor(int ganancia_total_por_mayor) {
-        this.ganancia_total_por_mayor = ganancia_total_por_mayor;
+    public void setGanancia_total(int ganancia_total) {
+        this.ganancia_total = ganancia_total;
     }
 
-    public int getGanancia_total_detal() {
-        return ganancia_total_detal;
+    public int getPrecio_total() {
+        return precio_total;
     }
 
-    public void setGanancia_total_detal(int ganancia_total_detal) {
-        this.ganancia_total_detal = ganancia_total_detal;
+    public void setPrecio_total(int precio_total) {
+        this.precio_total = precio_total;
     }
 
-    public int getPrecio_total_por_mayor() {
-        return precio_total_por_mayor;
-    }
-
-    public void setPrecio_total_por_mayor(int precio_total_por_mayor) {
-        this.precio_total_por_mayor = precio_total_por_mayor;
-    }
-
-    public int getPrecio_total_detal() {
-        return precio_total_detal;
-    }
-
-    public void setPrecio_total_detal(int precio_total_detal) {
-        this.precio_total_detal = precio_total_detal;
-    }
-
+    
     
 }

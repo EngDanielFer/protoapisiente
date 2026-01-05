@@ -40,10 +40,16 @@ public class ProductosController {
         this.insumosProductoService = insumosProductoService;
     }
 
+    @GetMapping("/stock")
+    public ArrayList<ProductosModel> getProductosByStock() {
+        return this.productosService.getProductosByStock();
+    }
+
     @GetMapping
     public ArrayList<ProductosModel> getProductos() {
         return this.productosService.getProductos();
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getproductoById(@PathVariable int id) {

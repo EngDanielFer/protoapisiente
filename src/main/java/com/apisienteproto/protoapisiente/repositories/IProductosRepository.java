@@ -14,6 +14,9 @@ import com.apisienteproto.protoapisiente.models.ProductosModel;
 @Repository
 public interface IProductosRepository extends JpaRepository<ProductosModel, Integer> {
 
+    @Query(value = "SELECT * FROM productos WHERE stock_producto > 0", nativeQuery = true)
+    List<ProductosModel> findProductosConStock();
+
     @Procedure(procedureName = "p_insertar_producto_insumos")
     void insertarProductoConInsumos(
             @Param("prod_id") int prodId,
