@@ -8,6 +8,8 @@ RUN mvn dependency:go-offline -q
 COPY src ./src
 RUN mvn clean package -DskipTests -q
 
+RUN ls -lh target/protoapisiente-1.0.0.jar
+
 FROM eclipse-temurin:17-jre-alpine
  
 WORKDIR /app
@@ -15,7 +17,7 @@ WORKDIR /app
 RUN addgroup -S siente && adduser -S siente -G siente
 USER siente
  
-COPY --from=build /app/target/protoapisiente-1.0.0.jar app.jar
+COPY --from=build /app/target/protoapisiente-1.0.0.jar ./app.jar
  
 EXPOSE 8000
  
