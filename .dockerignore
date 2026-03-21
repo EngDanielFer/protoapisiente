@@ -1,0 +1,16 @@
+.git
+.gitignore
+
+target/
+
+.idea/
+.vscode/
+*.iml
+*.iws
+
+*.log
+logs/
+
+.env
+.env.local
+application-local.properties
