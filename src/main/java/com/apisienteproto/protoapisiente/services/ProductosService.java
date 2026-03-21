@@ -1,51 +1,47 @@
 package com.apisienteproto.protoapisiente.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.apisienteproto.protoapisiente.exceptions.RecursoNoEncontradoException;
 import com.apisienteproto.protoapisiente.models.InsumoProductoDTO;
 import com.apisienteproto.protoapisiente.models.ProductoCompletoDTO;
 import com.apisienteproto.protoapisiente.models.ProductosModel;
 import com.apisienteproto.protoapisiente.repositories.IProductosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ProductosService {
 
-    @Autowired
-    IProductosRepository productosRepository;
+    private final IProductosRepository productosRepository;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
-    public ArrayList<ProductosModel> getProductos() {
-        return (ArrayList<ProductosModel>) productosRepository.findAll();
+    public List<ProductosModel> getProductos() {
+        return productosRepository.findAll();
     }
 
-    public ArrayList<ProductosModel> getProductosByStock() {
-        return (ArrayList<ProductosModel>) productosRepository.findProductosConStock();
+    public List<ProductosModel> getProductosByStock() {
+        return productosRepository.findProductosConStock();
     }
 
-    public Optional<ProductosModel> getProductoById(int id) {
-        return productosRepository.findById(id);
+    public ProductosModel getProductoById(int id) {
+        return productosRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                "Producto no encontrado con ID: " + id
+        ));
     }
 
     @Transactional(readOnly = true)
     public ProductoCompletoDTO getProductoCompleto(int id) {
-        Optional<ProductosModel> productoOpt = productosRepository.findById(id);
+        ProductosModel producto = getProductoById(id);
 
-        if (!productoOpt.isPresent()) {
-            throw new RuntimeException("Producto no encontrado con ID: " + id);
-        }
-
-        ProductosModel producto = productoOpt.get();
         ProductoCompletoDTO dto = new ProductoCompletoDTO();
 
         dto.setId(producto.getId());
@@ -93,11 +89,8 @@ public class ProductosService {
     }
 
     private double getDoubleValue(Object value) {
-        if (value == null) {
-            return 0.0;
-        }
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue();
+        if (value instanceof Number n) {
+            return n.doubleValue();
         }
         return 0.0;
     }
@@ -140,6 +133,9 @@ public class ProductosService {
 
     @Transactional
     public void eliminarProducto(int id) {
+        if (!existeProducto(id)) {
+            throw new RecursoNoEncontradoException("Producto no encontrado con ID: " + id);
+        }
         productosRepository.deleteById(id);
     }
 }

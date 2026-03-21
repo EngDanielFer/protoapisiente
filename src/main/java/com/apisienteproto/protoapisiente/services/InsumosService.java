@@ -1,42 +1,35 @@
 package com.apisienteproto.protoapisiente.services;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import com.apisienteproto.protoapisiente.exceptions.RecursoNoEncontradoException;
 import com.apisienteproto.protoapisiente.models.InsumosModel;
 import com.apisienteproto.protoapisiente.repositories.IInsumosRepository;
 
-import jakarta.persistence.PrePersist;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class InsumosService {
 
-    @Autowired
-    IInsumosRepository insumosRepository;
+    private final IInsumosRepository insumosRepository;
 
-    public ArrayList<InsumosModel> getInsumos() {
-        return (ArrayList<InsumosModel>) insumosRepository.findAll();
+    public List<InsumosModel> getInsumos() {
+        return insumosRepository.findAll();
     }
 
-    // public Optional<InsumosModel> getInsumoById(int id) {
-    //     return insumosRepository.findById(id);
-    // }
-
-    public ResponseEntity<?> getInsumoById(@PathVariable int id) {
+    public InsumosModel getInsumoById(int id) {
         return insumosRepository.findById(id)
-            .<ResponseEntity<?>>map(insumo -> ResponseEntity.ok(insumo))
-            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("No se ha encontado el insumo con el ID: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                "No se encontró el insumo con ID: " + id
+        ));
     }
 
-    @PrePersist
+    @Transactional
     public InsumosModel saveInsumo(InsumosModel insumo) {
         if (insumo.getEstado_insumo() == null || insumo.getEstado_insumo().isEmpty()) {
             insumo.setEstado_insumo("Disponible");
@@ -49,29 +42,23 @@ public class InsumosService {
         return insumosRepository.save(insumo);
     }
 
+    @Transactional
     public InsumosModel updateInsumo(InsumosModel request, int id) {
-        InsumosModel insumo = insumosRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("No se ha encontrado el insumo con el id " + id));
-        
-        if (request.getNombre_insumo() != null && !request.getNombre_insumo().isEmpty()) {
+        InsumosModel insumo = getInsumoById(id);
+
+        if (request.getNombre_insumo() != null && !request.getNombre_insumo().isBlank()) {
             insumo.setNombre_insumo(request.getNombre_insumo());
         }
 
-        if (request.getCantidad_insumo_total() != null && request.getCantidad_insumo_total().compareTo(BigDecimal.ZERO) > 0) {
-            // BigDecimal cantAnterior = insumo.getCantidad_insumo_total();
-            // BigDecimal nuevaCant = ;
-
-            // BigDecimal difCant = nuevaCant.subtract(cantAnterior);
-            // BigDecimal nuevaCantRest = insumo.getCantidad_insumo_restante().add(difCant);
-
+        if (request.getCantidad_insumo_total() != null && request.getCantidad_insumo_total().compareTo(BigDecimal.ZERO) >= 0) {
             insumo.setCantidad_insumo_total(request.getCantidad_insumo_total());
         }
 
-        if (request.getCantidad_insumo_restante() != null && request.getCantidad_insumo_restante().compareTo(BigDecimal.ZERO) > 0) {
+        if (request.getCantidad_insumo_restante() != null && request.getCantidad_insumo_restante().compareTo(BigDecimal.ZERO) >= 0) {
             insumo.setCantidad_insumo_restante(request.getCantidad_insumo_total());
         }
 
-        if (request.getProveedor_insumo() != null && !request.getProveedor_insumo().isEmpty()) {
+        if (request.getProveedor_insumo() != null && !request.getProveedor_insumo().isBlank()) {
             insumo.setProveedor_insumo(request.getProveedor_insumo());
         }
 
@@ -83,31 +70,22 @@ public class InsumosService {
             insumo.setPrecio_por_g_ml(request.getPrecio_por_g_ml());
         }
 
-        if (request.getEstado_insumo() != null && !request.getEstado_insumo().isEmpty()) {
+        if (request.getEstado_insumo() != null && !request.getEstado_insumo().isBlank()) {
             insumo.setEstado_insumo(request.getEstado_insumo());
         }
 
         return insumosRepository.save(insumo);
     }
 
-    // public boolean deleteInsumo(int id) {
-    //     try {
-    //         insumosRepository.deleteById(id);
-    //         return true;
-    //     } catch (Exception e) {
-    //         return false;
-    //     }
-    // }
-
-    public ResponseEntity<?> deleteInsumo(int id) {
+    @Transactional
+    public void deleteInsumo(int id) {
         if (!insumosRepository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("message", "No se encuentra el insumo con el ID: " + id));
+            throw new RecursoNoEncontradoException(
+                    "No se encontró el insumo con ID: " + id
+            );
         }
 
         insumosRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK)
-            .body(Map.of("message", "Se ha borrado el insumo con el ID: " + id));
     }
 
 }

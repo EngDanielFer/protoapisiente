@@ -1,10 +1,10 @@
 package com.apisienteproto.protoapisiente.controllers;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,50 +17,41 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apisienteproto.protoapisiente.models.InsumosModel;
 import com.apisienteproto.protoapisiente.services.InsumosService;
 
+import lombok.RequiredArgsConstructor;
+
 // localhost:8000/api/siente/insumos
 @RestController
 @RequestMapping("/api/siente/insumos")
-@CrossOrigin(origins="http://localhost:4200")
+@RequiredArgsConstructor
 public class InsumosController {
 
-    @Autowired
-    private InsumosService insumosService;
+    private final InsumosService insumosService;
 
     @GetMapping
-    public ArrayList<InsumosModel> getInsumos() {
+    public List<InsumosModel> getInsumos() {
         return this.insumosService.getInsumos();
     }
 
-    // @GetMapping(path="/{id}")
-    // public Optional<InsumosModel> getInsumoById(@PathVariable("id") int id) {
-    //     return this.insumosService.getInsumoById(id);
-    // }
-
-    @GetMapping(path="/{id}")
-    public ResponseEntity<?> getInsumoById(@PathVariable("id") int id) {
-        return this.insumosService.getInsumoById(id);
+    @GetMapping("/{id}")
+    public InsumosModel getInsumoById(@PathVariable int id) {
+        return insumosService.getInsumoById(id);
     }
 
     @PostMapping
-    public InsumosModel saveInsumo(@RequestBody InsumosModel insumo) {
-        return this.insumosService.saveInsumo(insumo);
+    public ResponseEntity<InsumosModel> saveInsumo(@RequestBody InsumosModel insumo) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(insumosService.saveInsumo(insumo));
     }
 
-    @PutMapping(path="/{id}")
-    public InsumosModel updateInsumoById(@RequestBody InsumosModel request, @PathVariable("id") int id) {
-        return this.insumosService.updateInsumo(request, id);
+    @PutMapping("/{id}")
+    public InsumosModel updateInsumo(@RequestBody InsumosModel request, @PathVariable int id) {
+        return insumosService.updateInsumo(request, id);
     }
 
-    @DeleteMapping(path="/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable("id") int id) {
-        // boolean ok = this.insumosService.deleteInsumo(id);
-
-        // if (ok) {
-        //     return "Se ha eliminado el insumo con el id: " + id;
-        // } else {
-        //     return "Error al eliminar el insumo con el id: " + id;
-        // }
-        return this.insumosService.deleteInsumo(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteById(@PathVariable int id) {
+        insumosService.deleteInsumo(id);
+        return ResponseEntity.ok(Map.of("mensaje", "Insumo eliminado correctamente"));
     }
 
 }

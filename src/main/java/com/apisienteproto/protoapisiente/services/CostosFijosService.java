@@ -4,124 +4,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apisienteproto.protoapisiente.models.CostoFijoItemDTO;
 import com.apisienteproto.protoapisiente.models.CostosFijosModel;
 import com.apisienteproto.protoapisiente.repositories.ICostosFijosRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CostosFijosService {
 
-    @Autowired
-    ICostosFijosRepository costosFijosRepository;
-
-    public ArrayList<CostosFijosModel> getCostosFijos() {
-        return (ArrayList<CostosFijosModel>) costosFijosRepository.findAll();
-    }
+    private final ICostosFijosRepository costosFijosRepository;
 
     public List<CostoFijoItemDTO> getCostosFijosByProducto(int idProducto) {
-        Optional<CostosFijosModel> costosFijosOpt = costosFijosRepository.findById(idProducto);
+        Optional<CostosFijosModel> opt = costosFijosRepository.findById(idProducto);
 
-        List<CostoFijoItemDTO> listaCostos = new ArrayList<>();
+        List<CostoFijoItemDTO> lista = new ArrayList<>();
 
-        if (costosFijosOpt.isPresent()) {
-            CostosFijosModel costos = costosFijosOpt.get();
-
-            if (costos.getCostoLuz() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Luz",
-                    costos.getCostoLuz()
-                ));
-            }
-
-            if (costos.getCostoAgua() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Agua",
-                    costos.getCostoAgua()
-                ));
-            }
-
-            if(costos.getCostoGas() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Gas",
-                    costos.getCostoGas()
-                ));
-            }
-
-            if(costos.getCostoAseo() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Aseo",
-                    costos.getCostoAseo()
-                ));
-            }
-
-            if(costos.getCostoInternet() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Internet",
-                    costos.getCostoInternet()
-                ));
-            }
-
-            if(costos.getManoDeObra() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Mano de obra",
-                    costos.getManoDeObra()
-                ));
-            }
-
-            if(costos.getCostoTransporte() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Transporte",
-                    costos.getCostoTransporte()
-                ));
-            }
-
-            if(costos.getCostoPerdidas() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Pérdidas",
-                    costos.getCostoPerdidas()
-                ));
-            }
-
-            if(costos.getCostoHerramientas() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Herramientas",
-                    costos.getCostoHerramientas()
-                ));
-            }
-
-            if(costos.getCostoMarketingRedes() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Marketing Redes Sociales",
-                    costos.getCostoMarketingRedes()
-                ));
-            }
-
-            if(costos.getCostoMarketingDisenador() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Marketing Diseñador",
-                    costos.getCostoMarketingDisenador()
-                ));
-            }
-
-            if(costos.getCostoAdmin() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Administración",
-                    costos.getCostoAdmin()
-                ));
-            }
-
-            if(costos.getCostoEtiqueta() > 0) {
-                listaCostos.add(new CostoFijoItemDTO(
-                    "Etiqueta",
-                    costos.getCostoEtiqueta()
-                ));
-            }
+        if (opt.isEmpty()) {
+            return lista;
         }
 
-        return listaCostos;
+        CostosFijosModel c = opt.get();
+
+        agregarSiPositivo(lista, "Luz", c.getCostoLuz());
+        agregarSiPositivo(lista, "Agua", c.getCostoAgua());
+        agregarSiPositivo(lista, "Gas", c.getCostoGas());
+        agregarSiPositivo(lista, "Aseo", c.getCostoAseo());
+        agregarSiPositivo(lista, "Internet", c.getCostoInternet());
+        agregarSiPositivo(lista, "Mano de obra", c.getManoDeObra());
+        agregarSiPositivo(lista, "Transporte", c.getCostoTransporte());
+        agregarSiPositivo(lista, "Pérdidas", c.getCostoPerdidas());
+        agregarSiPositivo(lista, "Herramientas", c.getCostoHerramientas());
+        agregarSiPositivo(lista, "Marketing Redes Sociales", c.getCostoMarketingRedes());
+        agregarSiPositivo(lista, "Marketing Diseñador", c.getCostoMarketingDisenador());
+        agregarSiPositivo(lista, "Administración", c.getCostoAdmin());
+        agregarSiPositivo(lista, "Etiqueta", c.getCostoEtiqueta());
+
+        return lista;
+    }
+
+    private void agregarSiPositivo(List<CostoFijoItemDTO> lista, String nombre, double valor) {
+        if (valor > 0) {
+            lista.add(new CostoFijoItemDTO(nombre, valor));
+        }
     }
 
 }

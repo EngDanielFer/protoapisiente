@@ -3,19 +3,23 @@ package com.apisienteproto.protoapisiente.services;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apisienteproto.protoapisiente.models.StockListadoDTO;
 import com.apisienteproto.protoapisiente.repositories.IStockRepository;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class StockService {
 
-    @Autowired
-    private IStockRepository stockRepository;
+    private final IStockRepository stockRepository;
 
+    @Transactional(readOnly = true)
     public List<StockListadoDTO> getStock() {
         return stockRepository.findAll()
             .stream()
@@ -23,10 +27,10 @@ public class StockService {
             .toList();
     }
 
-    @Transactional(rollbackFor=Exception.class)
-    public void insertarStockProducto(int id_producto, int cantidad_producto) throws SQLException {
+    @Transactional
+    public void insertarStockProducto(int idProducto, int cantidadProducto) throws SQLException {
         try {
-            stockRepository.insertarStockProductoGanancias(id_producto, cantidad_producto);
+            stockRepository.insertarStockProductoGanancias(idProducto, cantidadProducto);
         } catch (Exception e) {
             String msjError = e.getMessage();
             if (msjError != null) {
@@ -37,12 +41,13 @@ public class StockService {
                 } else if (msjError.contains("No existe el producto")) {
                     throw new IllegalArgumentException("No existe el producto");
                 } else if (msjError.contains("No hay insumos definidos")) {
-                    throw new IllegalArgumentException("No hay insumos definidos");
+                    throw new IllegalArgumentException("No hay insumos definidos para este producto");
                 } else if (msjError.contains("No hay suficiente insumo")) {
-                    throw new IllegalArgumentException("No hay suficiente insumo");
+                    throw new IllegalArgumentException("Stock de insumos insuficiente");
                 }
             }
-            throw new SQLException("Error al insertar stock: " + msjError, e);
+            log.error("Error al insertar stock: {}", msjError, e);
+            throw new RuntimeException("Error al procesar el stock", e);
         }
     }
 
